@@ -69,7 +69,7 @@ namespace ScreenInteractions
             }
         }
 
-        private void ProcessHandlers(IEnumerable<IClickHandler> handlers, Action<IClickHandler> action)
+        private static void ProcessHandlers(IEnumerable<IClickHandler> handlers, Action<IClickHandler> action)
         {
             foreach (var handler in handlers)
             {
