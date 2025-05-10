@@ -1,6 +1,6 @@
 #nullable enable
 
-using System;
+using Configs;
 using Locations;
 using ScreenInteractions;
 using UnityEngine;
@@ -11,8 +11,13 @@ public class Main : MonoBehaviour
 
     public IClickManager ClickManager => _clickManager;
     
+    public GeneralConfig GeneralConfig => _generalConfig;
+    
     [SerializeField]
     private Camera _mainCamera = null!;
+    
+    [SerializeField]
+    private GeneralConfig _generalConfig = null!;
     
     private ClickManager _clickManager = null!;
     private GameLocation _gameLocation = null!;
