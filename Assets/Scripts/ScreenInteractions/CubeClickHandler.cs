@@ -1,5 +1,6 @@
 ﻿#nullable enable
 
+using System.Collections;
 using EnvLevel;
 using UnityEngine;
 
@@ -13,7 +14,6 @@ namespace ScreenInteractions
         
         private readonly Camera _camera;
 
-        private float _cameraZDistance;
         private CubeView? _selectedCube;
         
         public CubeClickHandler(Camera camera)
@@ -41,10 +41,16 @@ namespace ScreenInteractions
             {
                 return;
             }
-
-            _cameraZDistance = _camera.WorldToScreenPoint(cubeView.transform.position).z;
+            
             _selectedCube = cubeView;
             _selectedCube.Select();
+            
+            var cubePositionOnZAxis = Main.Instance.GeneralConfig.EnvConfig.CubePositionOnZAxis;
+            
+            if (!Mathf.Approximately(cubeView.transform.position.z, cubePositionOnZAxis))
+            {
+                Main.Instance.StartCoroutine(AnimationOfZAxisAdjustment());
+            }
         }
 
         public void Drag(RaycastHit? hit)
@@ -55,7 +61,8 @@ namespace ScreenInteractions
             }
             
             var mousePosition = Input.mousePosition;
-            var screenPosition = new Vector3(mousePosition.x, mousePosition.y, _cameraZDistance);
+            var cameraZDistance = _camera.WorldToScreenPoint(_selectedCube.transform.position).z;
+            var screenPosition = new Vector3(mousePosition.x, mousePosition.y, cameraZDistance);
             var worldPosition = _camera.ScreenToWorldPoint(screenPosition);
             _selectedCube.transform.position = worldPosition;
         }
@@ -69,6 +76,33 @@ namespace ScreenInteractions
             
             _selectedCube.Deselect();
             _selectedCube = null;
+        }
+
+        private IEnumerator AnimationOfZAxisAdjustment()
+        {
+            const float maxProgress = 1.0f;
+            
+            var time = 0.0f;
+            var progress = 0.0f;
+            var envConfig = Main.Instance.GeneralConfig.EnvConfig;
+            var timeAnimation = envConfig.AdjustingCubeAlongZAxis.Time;
+            var cubePositionOnZAxis = envConfig.CubePositionOnZAxis;
+
+            while (progress < maxProgress && _selectedCube != null)
+            {
+                progress = Mathf.Clamp01(time / timeAnimation);
+                
+                var cubePosition = _selectedCube.transform.position;
+                var cubeEndPosition = new Vector3(cubePosition.x, cubePosition.y, cubePositionOnZAxis);
+                
+                var updatedCubePosition = Vector3.Lerp(cubePosition, cubeEndPosition, progress);
+
+                _selectedCube.transform.position = updatedCubePosition;
+                
+                yield return null;
+                
+                time += Time.deltaTime;
+            }
         }
     }
 }
