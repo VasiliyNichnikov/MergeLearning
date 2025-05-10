@@ -13,12 +13,14 @@ namespace ScreenInteractions
         private const int LeftMouseButton = 0;
         
         private readonly Camera _camera;
+        private readonly CubePositionInspector _cubePositionInspector;
 
         private CubeView? _selectedCube;
         
-        public CubeClickHandler(Camera camera)
+        public CubeClickHandler(Camera camera, CubePositionInspector cubePositionInspector)
         {
             _camera = camera;
+            _cubePositionInspector = cubePositionInspector;
         }
 
         public void Down(RaycastHit? hit)
@@ -64,7 +66,9 @@ namespace ScreenInteractions
             var cameraZDistance = _camera.WorldToScreenPoint(_selectedCube.transform.position).z;
             var screenPosition = new Vector3(mousePosition.x, mousePosition.y, cameraZDistance);
             var worldPosition = _camera.ScreenToWorldPoint(screenPosition);
-            _selectedCube.transform.position = worldPosition;
+            var finalPosition = _cubePositionInspector.ValidatePosition(worldPosition);
+            
+            _selectedCube.transform.position = finalPosition;
         }
 
         public void Up(RaycastHit? hit)

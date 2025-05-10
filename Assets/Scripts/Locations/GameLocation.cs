@@ -1,6 +1,7 @@
 ﻿#nullable enable
 
 using System;
+using EnvLevel;
 using ScreenInteractions;
 using UnityEngine;
 
@@ -10,9 +11,10 @@ namespace Locations
     {
         private readonly CubeClickHandler _cubeClickHandler;
         
-        public GameLocation(Camera camera)
+        public GameLocation(Camera camera, EnvData envData)
         {
-            _cubeClickHandler = new CubeClickHandler(camera);
+            var cubePositionInspector = new CubePositionInspector(envData);
+            _cubeClickHandler = new CubeClickHandler(camera, cubePositionInspector);
         }
 
         public void Load()

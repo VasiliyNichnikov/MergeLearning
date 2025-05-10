@@ -1,6 +1,7 @@
 #nullable enable
 
 using Configs;
+using EnvLevel;
 using Locations;
 using ScreenInteractions;
 using UnityEngine;
@@ -19,6 +20,9 @@ public class Main : MonoBehaviour
     [SerializeField]
     private GeneralConfig _generalConfig = null!;
     
+    [SerializeField]
+    private EnvData _envData = null!;
+    
     private ClickManager _clickManager = null!;
     private GameLocation _gameLocation = null!;
     
@@ -26,7 +30,7 @@ public class Main : MonoBehaviour
     {
         Instance = this;
 
-        _gameLocation = new GameLocation(_mainCamera);
+        _gameLocation = new GameLocation(_mainCamera, _envData);
         _clickManager = new ClickManager(_mainCamera);
     }
 
