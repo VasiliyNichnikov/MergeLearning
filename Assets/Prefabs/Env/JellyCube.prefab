@@ -84,6 +84,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6fc588da6a2b43c46ad1c37fa9e8a214, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6072222535806234910}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6fc588da6a2b43c46ad1c37fa9e8a214, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4506514001721817407}
   m_SourcePrefab: {fileID: 100100000, guid: 6fc588da6a2b43c46ad1c37fa9e8a214, type: 3}
 --- !u!33 &5913228716998041808 stripped
 MeshFilter:
@@ -156,6 +159,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 2762349401120054507}
+  _boxCollider: {fileID: 4660756781408369963}
 --- !u!114 &6072222535806234910
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,6 +177,23 @@ MonoBehaviour:
   _damping: 0.85
   _meshFilter: {fileID: 5913228716998041808}
   _meshRenderer: {fileID: 8499688299653125146}
+--- !u!111 &4506514001721817407
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7995025175381931471}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Animation: {fileID: 7400000, guid: 88f54fbf6e6f4744cba394385f83f2d5, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 88f54fbf6e6f4744cba394385f83f2d5, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_UpdateMode: 0
+  m_CullingType: 0
 --- !u!23 &8499688299653125146 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 6fc588da6a2b43c46ad1c37fa9e8a214, type: 3}
