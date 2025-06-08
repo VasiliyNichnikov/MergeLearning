@@ -476,6 +476,8 @@ MonoBehaviour:
   _mainCamera: {fileID: 330585545}
   _generalConfig: {fileID: 11400000, guid: eff05b049989d4e42b0be255311dec6f, type: 2}
   _envData: {fileID: 1179443984}
+  _cubeSpawner: {fileID: 1513152389}
+  _cubeViewPrefab: {fileID: 4464899048715374455, guid: abcead23c7940c94c967e46420002536, type: 3}
 --- !u!4 &820161180
 Transform:
   m_ObjectHideFlags: 0
@@ -990,7 +992,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _startingAreas:
   - {fileID: 536625152}
-  _cubeView: {fileID: 4464899048715374455, guid: abcead23c7940c94c967e46420002536, type: 3}
 --- !u!1 &1688113136
 GameObject:
   m_ObjectHideFlags: 0

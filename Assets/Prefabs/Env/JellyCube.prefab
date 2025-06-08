@@ -160,6 +160,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 2762349401120054507}
   _boxCollider: {fileID: 4660756781408369963}
+  _renderer: {fileID: 8499688299653125146}
 --- !u!114 &6072222535806234910
 MonoBehaviour:
   m_ObjectHideFlags: 0

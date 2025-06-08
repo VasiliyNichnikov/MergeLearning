@@ -3,6 +3,7 @@
 using Configs;
 using EnvLevel;
 using Locations;
+using MergeLogic;
 using ScreenInteractions;
 using UnityEngine;
 
@@ -14,6 +15,8 @@ public class Main : MonoBehaviour
     
     public GeneralConfig GeneralConfig => _generalConfig;
     
+    public MergeManager MergeManager => _mergeManager;
+    
     [SerializeField]
     private Camera _mainCamera = null!;
     
@@ -23,14 +26,21 @@ public class Main : MonoBehaviour
     [SerializeField]
     private EnvData _envData = null!;
     
+    [SerializeField]
+    private CubeSpawner _cubeSpawner = null!;
+    
+    [SerializeField]
+    private CubeView _cubeViewPrefab = null!;
+    
     private ClickManager _clickManager = null!;
+    private MergeManager _mergeManager = null!;
     private GameLocation _gameLocation = null!;
     
     private void Awake()
     {
         Instance = this;
-
-        _gameLocation = new GameLocation(_mainCamera, _envData);
+        _mergeManager = new MergeManager(new LevelGeneration());
+        _gameLocation = new GameLocation(_mainCamera, _envData, _cubeSpawner, _cubeViewPrefab);
         _clickManager = new ClickManager(_mainCamera);
     }
 

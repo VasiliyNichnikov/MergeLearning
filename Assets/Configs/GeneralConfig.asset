@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: GeneralConfig
   m_EditorClassIdentifier: 
   _envConfig: {fileID: 11400000, guid: 6f810fe594e64ab4d9e6a928044dd7f0, type: 2}
+  _cubeColorsConfig: {fileID: 11400000, guid: 5c93345b71749dd449f88fa7c2839f1e, type: 2}

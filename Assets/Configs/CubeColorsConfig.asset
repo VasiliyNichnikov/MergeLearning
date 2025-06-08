@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8db06b2370a4179bd65df229aeb0ebb, type: 3}
+  m_Name: CubeColorsConfig
+  m_EditorClassIdentifier: 
+  _cubeColors:
+  - Level: 0
+    Color: {r: 0.4392157, g: 0.27450982, b: 0.27450982, a: 1}
+  - Level: 1
+    Color: {r: 0.39866987, g: 0.27450982, b: 0.4392157, a: 1}
+  - Level: 2
+    Color: {r: 0.4392157, g: 0.43629983, b: 0.27450982, a: 1}
+  - Level: 3
+    Color: {r: 0.27450982, g: 0.4392157, b: 0.43391615, a: 1}

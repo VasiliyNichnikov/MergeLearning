@@ -9,6 +9,8 @@ namespace EnvLevel
     public class StartingAreaCube : MonoBehaviour
     {
         public event Action? OnRelease;
+
+        private const float DelayBeforeCreatingCube = 0.25f;
         
         [SerializeField]
         private BoxCollider _boxCollider = null!;
@@ -21,10 +23,15 @@ namespace EnvLevel
         {
             var cube = other.GetComponent<CubeView>();
 
+            if (cube == null)
+            {
+                return;
+            }
+            
             if (_selectedCube == null)
             {
                 _selectedCube = cube;
-
+                
                 StartCoroutine(WaitingForCubeToExit());
             }
         }
@@ -33,13 +40,15 @@ namespace EnvLevel
         {
             while (_selectedCube != null)
             {
-                yield return null;
-
                 if (!_boxCollider.bounds.Intersects(_selectedCube.Bounds))
                 {
                     _selectedCube = null;
                 }
+                
+                yield return null;
             }
+
+            yield return new WaitForSeconds(DelayBeforeCreatingCube);
             
             OnRelease?.Invoke();
         }
