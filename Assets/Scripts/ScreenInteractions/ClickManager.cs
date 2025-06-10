@@ -47,6 +47,7 @@ namespace ScreenInteractions
                 return;
             }
             
+            handler.Dispose();
             _handlers.Remove(handler);
         }
 

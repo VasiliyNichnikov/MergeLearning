@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Generic;
 using Data;
 using EnvLevel;
@@ -9,6 +11,12 @@ namespace MergeLogic
     public class MergeManager
     {
         private const float MinMergingDistance = 0.5f;
+
+        /// <summary>
+        /// Вызывается в случае, если нужно поменять выбранный куб
+        /// В качестве аргумента передается новый куб
+        /// </summary>
+        public event Action<ICubeController>? OnSelectedCubeChanged; 
         
         private readonly Dictionary<CubeLevel, CollisionGroup> _groups = new();
         
@@ -68,6 +76,11 @@ namespace MergeLogic
             }
             
             var (main, sucker) = GetMainAndSuckerBalls(a, b);
+
+            if (sucker.IsSelected)
+            {
+                OnSelectedCubeChanged?.Invoke(main);
+            }
 
             UpdateLevelForCube(main);
             

@@ -30,7 +30,11 @@ namespace EnvLevel
         
         public float SpeedOfMovement => _rigidbody.linearVelocity.magnitude;
 
-        public Vector3 Position => transform.position;
+        public Vector3 Position
+        {
+            get => transform.position;
+            set => transform.position = value;
+        }
 
         public ChangerColor ChangerColor { get; private set; } = null!;
 

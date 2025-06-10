@@ -15,12 +15,13 @@ namespace ScreenInteractions
         private readonly Camera _camera;
         private readonly CubePositionInspector _cubePositionInspector;
 
-        private CubeView? _selectedCube;
+        private ICubeController? _selectedCube;
         
         public CubeClickHandler(Camera camera, CubePositionInspector cubePositionInspector)
         {
             _camera = camera;
             _cubePositionInspector = cubePositionInspector;
+            Main.Instance.MergeManager.OnSelectedCubeChanged += OnSelectedCubeChanged;
         }
 
         public void Down(RaycastHit? hit)
@@ -43,16 +44,8 @@ namespace ScreenInteractions
             {
                 return;
             }
-            
-            _selectedCube = cubeView;
-            _selectedCube.Select();
-            
-            var cubePositionOnZAxis = Main.Instance.GeneralConfig.EnvConfig.CubePositionOnZAxis;
-            
-            if (!Mathf.Approximately(cubeView.transform.position.z, cubePositionOnZAxis))
-            {
-                Main.Instance.StartCoroutine(AnimationOfZAxisAdjustment());
-            }
+
+            SelectCube(cubeView);
         }
 
         public void Drag(RaycastHit? hit)
@@ -63,15 +56,36 @@ namespace ScreenInteractions
             }
             
             var mousePosition = Input.mousePosition;
-            var cameraZDistance = _camera.WorldToScreenPoint(_selectedCube.transform.position).z;
+            var cameraZDistance = _camera.WorldToScreenPoint(_selectedCube.Position).z;
             var screenPosition = new Vector3(mousePosition.x, mousePosition.y, cameraZDistance);
             var worldPosition = _camera.ScreenToWorldPoint(screenPosition);
             var finalPosition = _cubePositionInspector.ValidatePosition(worldPosition);
             
-            _selectedCube.transform.position = finalPosition;
+            _selectedCube.Position = finalPosition;
         }
 
-        public void Up(RaycastHit? hit)
+        public void Up(RaycastHit? hit) => DeselectCube();
+
+        private void OnSelectedCubeChanged(ICubeController selectedCube)
+        {
+            DeselectCube();
+            SelectCube(selectedCube);
+        }
+
+        private void SelectCube(ICubeController newCube)
+        {
+            _selectedCube = newCube;
+            _selectedCube.Select();
+            
+            var cubePositionOnZAxis = Main.Instance.GeneralConfig.EnvConfig.CubePositionOnZAxis;
+            
+            if (!Mathf.Approximately(_selectedCube.Position.z, cubePositionOnZAxis))
+            {
+                Main.Instance.StartCoroutine(AnimationOfZAxisAdjustment());
+            }
+        }
+
+        private void DeselectCube()
         {
             if (_selectedCube == null)
             {
@@ -81,7 +95,7 @@ namespace ScreenInteractions
             _selectedCube.Deselect();
             _selectedCube = null;
         }
-
+        
         private IEnumerator AnimationOfZAxisAdjustment()
         {
             const float maxProgress = 1.0f;
@@ -96,17 +110,22 @@ namespace ScreenInteractions
             {
                 progress = Mathf.Clamp01(time / timeAnimation);
                 
-                var cubePosition = _selectedCube.transform.position;
+                var cubePosition = _selectedCube.Position;
                 var cubeEndPosition = new Vector3(cubePosition.x, cubePosition.y, cubePositionOnZAxis);
                 
                 var updatedCubePosition = Vector3.Lerp(cubePosition, cubeEndPosition, progress);
 
-                _selectedCube.transform.position = updatedCubePosition;
+                _selectedCube.Position = updatedCubePosition;
                 
                 yield return null;
                 
                 time += Time.deltaTime;
             }
+        }
+
+        public void Dispose()
+        {
+            Main.Instance.MergeManager.OnSelectedCubeChanged -= OnSelectedCubeChanged;
         }
     }
 }

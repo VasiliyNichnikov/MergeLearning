@@ -18,10 +18,14 @@ namespace EnvLevel
         
         float SpeedOfMovement { get; }
         
-        Vector3 Position { get; }
+        Vector3 Position { get; set; }
         
         ChangerColor ChangerColor { get; }
 
+        void Select();
+        
+        void Deselect();
+        
         void AddToGroup(CollisionGroup group);
         
         void RemoveFromGroup(CollisionGroup group);

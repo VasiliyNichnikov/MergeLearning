@@ -1,10 +1,11 @@
 ﻿#nullable enable
 
+using System;
 using UnityEngine;
 
 namespace ScreenInteractions
 {
-    public interface IClickHandler
+    public interface IClickHandler : IDisposable
     {
         int MouseButton { get; }
         
