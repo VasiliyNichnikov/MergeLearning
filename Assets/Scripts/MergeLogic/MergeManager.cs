@@ -98,6 +98,12 @@ namespace MergeLogic
             var nextLevel = _storage.GetNextLevel(level);
             _storage[cube] = nextLevel;
             cube.ChangerColor.ApplyColor(nextLevel);
+
+            if (_storage.IsMaxLevel(nextLevel))
+            {
+                return;
+            }
+            
             var newGroup = GetOrCreateGroup(nextLevel);
             cube.AddToGroup(newGroup);
         }

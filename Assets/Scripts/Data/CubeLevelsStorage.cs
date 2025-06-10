@@ -41,12 +41,17 @@ namespace Data
             }
         }
         
-        public CubeLevel GetNextLevel(CubeLevel a)
+        public CubeLevel GetNextLevel(CubeLevel level)
         {
-            var levelIndex = (int)a;
+            var levelIndex = (int)level;
             var nextLevel = Levels[Math.Min(Levels.Length - 1, levelIndex + 1)];
             
             return nextLevel;
+        }
+
+        public bool IsMaxLevel(CubeLevel level)
+        {
+            return level == _maxLevel;
         }
         
         public bool CanMergeByLevel(ICubeController a, ICubeController b)
