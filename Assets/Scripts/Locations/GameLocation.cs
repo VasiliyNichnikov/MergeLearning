@@ -29,7 +29,9 @@ namespace Locations
         public void Load()
         {
             var mergeManager = Main.Instance.MergeManager;
-            var cubeViewFactory = new CubeViewFactory(mergeManager, _cubeViewPrefab);
+            var magnetManager = Main.Instance.MagnetManager;
+            
+            var cubeViewFactory = new CubeViewFactory(mergeManager, magnetManager, _cubeViewPrefab);
             
             _spawner.Init(cubeViewFactory);
             Main.Instance.ClickManager.AddHandler(_cubeClickHandler);

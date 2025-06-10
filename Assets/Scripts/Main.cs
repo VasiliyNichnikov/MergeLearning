@@ -1,8 +1,10 @@
 #nullable enable
 
 using Configs;
+using Data;
 using EnvLevel;
 using Locations;
+using Magnet;
 using MergeLogic;
 using ScreenInteractions;
 using UnityEngine;
@@ -16,6 +18,8 @@ public class Main : MonoBehaviour
     public GeneralConfig GeneralConfig => _generalConfig;
     
     public MergeManager MergeManager => _mergeManager;
+    
+    public MagnetManager MagnetManager => _magnetManager;
     
     [SerializeField]
     private Camera _mainCamera = null!;
@@ -32,6 +36,7 @@ public class Main : MonoBehaviour
     [SerializeField]
     private CubeView _cubeViewPrefab = null!;
     
+    private MagnetManager _magnetManager = null!;
     private ClickManager _clickManager = null!;
     private MergeManager _mergeManager = null!;
     private GameLocation _gameLocation = null!;
@@ -39,7 +44,9 @@ public class Main : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        _mergeManager = new MergeManager(new LevelGeneration());
+        var cubeLevelsStorage = new CubeLevelsStorage();
+        _mergeManager = new MergeManager(new LevelGeneration(), cubeLevelsStorage);
+        _magnetManager = new MagnetManager(cubeLevelsStorage);
         _gameLocation = new GameLocation(_mainCamera, _envData, _cubeSpawner, _cubeViewPrefab);
         _clickManager = new ClickManager(_mainCamera);
     }
@@ -52,6 +59,11 @@ public class Main : MonoBehaviour
     private void Update()
     {
         _clickManager.Update();
+    }
+
+    private void FixedUpdate()
+    {
+        _magnetManager.FixedUpdate();
     }
 
     private void OnDestroy()

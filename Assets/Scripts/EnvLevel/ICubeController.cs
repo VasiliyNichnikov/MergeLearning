@@ -1,6 +1,8 @@
 ﻿#nullable enable
 
+using System;
 using MergeLogic;
+using UnityEngine;
 
 namespace EnvLevel
 {
@@ -9,8 +11,14 @@ namespace EnvLevel
         delegate void TryMerge(ICubeController a, ICubeController b);
         
         event TryMerge? OnTryMerge;
+
+        event Action? OnBeforeDestroy; 
+        
+        bool IsSelected { get; }
         
         float SpeedOfMovement { get; }
+        
+        Vector3 Position { get; }
         
         ChangerColor ChangerColor { get; }
 
@@ -18,6 +26,8 @@ namespace EnvLevel
         
         void RemoveFromGroup(CollisionGroup group);
 
+        void AddForce(Vector3 force);
+        
         void Destroy();
     }
 }

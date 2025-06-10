@@ -13,8 +13,12 @@ namespace EnvLevel
         {
             _tryMergeAction = tryMergeAction;
         }
-        
-        private void OnTriggerEnter(Collider other)
+
+        private void OnTriggerEnter(Collider other) => TryCompleteMerge(other);
+
+        private void OnTriggerStay(Collider other) => TryCompleteMerge(other);
+
+        private void TryCompleteMerge(Collider other)
         {
             var otherBall = other.GetComponent<CubeView>();
 

@@ -2,23 +2,23 @@
 using System.Collections.Generic;
 using Data;
 using EnvLevel;
+using UnityEngine;
 
 namespace MergeLogic
 {
     public class MergeManager
     {
-        private readonly Dictionary<ICubeController, CubeLevel> _cubeLevels = new();
+        private const float MinMergingDistance = 0.5f;
+        
         private readonly Dictionary<CubeLevel, CollisionGroup> _groups = new();
         
-        private readonly CubeLevel[] _levels = (CubeLevel[])Enum.GetValues(typeof(CubeLevel));
-        
+        private readonly CubeLevelsStorage _storage;
         private readonly LevelGeneration _levelGeneration;
-        private readonly CubeLevel _maxLevel;
         
-        public MergeManager(LevelGeneration levelGeneration)
+        public MergeManager(LevelGeneration levelGeneration, CubeLevelsStorage storage)
         {
             _levelGeneration = levelGeneration;
-            _maxLevel = _levels[^1];
+            _storage = storage;
         }
 
         public void AddCube(ICubeController cube)
@@ -28,11 +28,10 @@ namespace MergeLogic
             var changerColor = cube.ChangerColor;
             changerColor.ApplyColor(initLevel);
             
-            _cubeLevels.Add(cube, initLevel);
+            _storage.Add(cube, initLevel);
 
             var group = GetOrCreateGroup(initLevel);
             cube.AddToGroup(group);
-            
             
             cube.OnTryMerge += OnTryMerge;
         }
@@ -56,15 +55,14 @@ namespace MergeLogic
 
         private void TryMergeInternal(ICubeController a, ICubeController b)
         {
-            var aLevel = _cubeLevels[a];
-            var bLevel = _cubeLevels[b];
-
-            if (aLevel == _maxLevel || bLevel == _maxLevel)
+            if (!_storage.CanMergeByLevel(a, b))
             {
                 return;
             }
             
-            if (aLevel != bLevel)
+            var distance = Vector3.Distance(a.Position, b.Position);
+            
+            if (distance > MinMergingDistance)
             {
                 return;
             }
@@ -73,30 +71,22 @@ namespace MergeLogic
 
             UpdateLevelForCube(main);
             
-            var suckerGroup = GetOrCreateGroup(_cubeLevels[sucker]);
+            var suckerGroup = GetOrCreateGroup(_storage[sucker]);
             sucker.RemoveFromGroup(suckerGroup);
             sucker.Destroy();
         }
 
         private void UpdateLevelForCube(ICubeController cube)
         {
-            var level = _cubeLevels[cube];
+            var level = _storage[cube];
             var oldGroup = GetOrCreateGroup(level);
             cube.RemoveFromGroup(oldGroup);
             
-            var nextLevel = GetNextLevel(level);
-            _cubeLevels[cube] = nextLevel;
+            var nextLevel = _storage.GetNextLevel(level);
+            _storage[cube] = nextLevel;
             cube.ChangerColor.ApplyColor(nextLevel);
             var newGroup = GetOrCreateGroup(nextLevel);
             cube.AddToGroup(newGroup);
-        }
-
-        private CubeLevel GetNextLevel(CubeLevel a)
-        {
-            var levelIndex = (int)a;
-            var nextLevel = _levels[Math.Min(_levels.Length - 1, levelIndex + 1)];
-            
-            return nextLevel;
         }
 
         private static (ICubeController Main, ICubeController Sucker) GetMainAndSuckerBalls(ICubeController first, ICubeController second)
