@@ -1,5 +1,6 @@
 ﻿#nullable enable
 
+using MergeLogic;
 using UnityEngine;
 
 namespace EnvLevel
@@ -47,6 +48,16 @@ namespace EnvLevel
         {
             Destroy(gameObject);
             Destroy(this);
+        }
+        
+        public void AddToGroup(CollisionGroup group)
+        {
+            group.Add(_boxCollider);
+        }
+
+        public void RemoveFromGroup(CollisionGroup group)
+        {
+            group.Remove(_boxCollider);
         }
 
         private void OnTryMergeCall(ICubeController otherBall)

@@ -8,6 +8,8 @@ namespace MergeLogic
     public class MergeManager
     {
         private readonly Dictionary<ICubeController, CubeLevel> _cubeLevels = new();
+        private readonly Dictionary<CubeLevel, CollisionGroup> _groups = new();
+        
         private readonly CubeLevel[] _levels = (CubeLevel[])Enum.GetValues(typeof(CubeLevel));
         
         private readonly LevelGeneration _levelGeneration;
@@ -27,8 +29,24 @@ namespace MergeLogic
             changerColor.ApplyColor(initLevel);
             
             _cubeLevels.Add(cube, initLevel);
+
+            var group = GetOrCreateGroup(initLevel);
+            cube.AddToGroup(group);
+            
             
             cube.OnTryMerge += OnTryMerge;
+        }
+
+        private CollisionGroup GetOrCreateGroup(CubeLevel level)
+        {
+            if (_groups.TryGetValue(level, out var group))
+            {
+                return group;
+            }
+            
+            _groups.Add(level, group = new CollisionGroup());
+
+            return group;
         }
 
         private void OnTryMerge(ICubeController a, ICubeController b)
@@ -51,13 +69,26 @@ namespace MergeLogic
                 return;
             }
             
-            var nextLevel = GetNextLevel(aLevel);
             var (main, sucker) = GetMainAndSuckerBalls(a, b);
 
-            _cubeLevels[main] = nextLevel;
-            main.ChangerColor.ApplyColor(nextLevel);
+            UpdateLevelForCube(main);
             
+            var suckerGroup = GetOrCreateGroup(_cubeLevels[sucker]);
+            sucker.RemoveFromGroup(suckerGroup);
             sucker.Destroy();
+        }
+
+        private void UpdateLevelForCube(ICubeController cube)
+        {
+            var level = _cubeLevels[cube];
+            var oldGroup = GetOrCreateGroup(level);
+            cube.RemoveFromGroup(oldGroup);
+            
+            var nextLevel = GetNextLevel(level);
+            _cubeLevels[cube] = nextLevel;
+            cube.ChangerColor.ApplyColor(nextLevel);
+            var newGroup = GetOrCreateGroup(nextLevel);
+            cube.AddToGroup(newGroup);
         }
 
         private CubeLevel GetNextLevel(CubeLevel a)
