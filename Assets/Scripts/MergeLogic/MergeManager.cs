@@ -1,22 +1,14 @@
-﻿using EnvLevel;
+﻿using Data;
 
 namespace MergeLogic
 {
     public class MergeManager
     {
-        private readonly LevelGeneration _levelGeneration;
+        private readonly CubeSceneStorage _cubeStorage;
         
-        public MergeManager(LevelGeneration levelGeneration)
+        public MergeManager(CubeSceneStorage cubeStorage)
         {
-            _levelGeneration = levelGeneration;
-        }
-
-        public void AddCube(ICubeController cube)
-        {
-            var initLevel = _levelGeneration.Generate();
-            
-            var changerColor = cube.ChangerColor;
-            changerColor.ApplyColor(initLevel);
+            _cubeStorage = cubeStorage;
         }
     }
 }

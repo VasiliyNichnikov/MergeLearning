@@ -1,6 +1,7 @@
 #nullable enable
 
 using Configs;
+using Data;
 using EnvLevel;
 using Locations;
 using MergeLogic;
@@ -39,8 +40,9 @@ public class Main : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        _mergeManager = new MergeManager(new LevelGeneration());
-        _gameLocation = new GameLocation(_mainCamera, _envData, _cubeSpawner, _cubeViewPrefab);
+        var cubeStorage = new CubeSceneStorage();
+        _mergeManager = new MergeManager(cubeStorage);
+        _gameLocation = new GameLocation(_mainCamera, _envData, _cubeSpawner, _cubeViewPrefab, cubeStorage);
         _clickManager = new ClickManager(_mainCamera);
     }
 
