@@ -59,5 +59,6 @@ public class Main : MonoBehaviour
     private void OnDestroy()
     {
         _gameLocation.Dispose();
+        _mergeManager.Dispose();
     }
 }

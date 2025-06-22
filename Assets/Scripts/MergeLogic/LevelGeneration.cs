@@ -1,6 +1,8 @@
 ﻿#nullable enable
 
+using System;
 using Data;
+using Random = UnityEngine.Random;
 
 namespace MergeLogic
 {
@@ -8,7 +10,8 @@ namespace MergeLogic
     {
         public CubeLevel Generate()
         {
-            return CubeLevel.Level_1;
+            var index = Random.Range(0, Enum.GetValues(typeof(CubeLevel)).Length - 1);
+            return (CubeLevel)index;
         }
     }
 }
